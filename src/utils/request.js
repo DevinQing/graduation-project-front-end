@@ -3,9 +3,9 @@
  * 二次封装的目的还是很简单，就是将常用的需要多个步骤使用的东西封装成一步，减少重复性的工作
  */
 import axios from 'axios'
-import config from '../src/config'
+import config from '../config'
 import { ElMessage } from 'element-plus'
-import router from '../src/router'
+import router from '../router'
 import storage from './storage'
 
 const TOKEN_INVALID = 'Token认证失败， 请重新登陆'
@@ -27,7 +27,7 @@ service.interceptors.request.use((req) => {
   // 等有登录功能了之后再开启
   // const { token } = storage.getItem('userInfo')
   // // 判断请求权限
-  // // 发起请求的时候必须带上 token 这是 jwt 模式用于登录认真的
+  // // 发起请求的时候必须带上 token 这是 jwt 模式用于登录认证的
   // if (!headers.Authorization) {
   //   headers.Authorization = 'Bearer ' + token
   // }

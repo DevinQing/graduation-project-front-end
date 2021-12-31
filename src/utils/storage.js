@@ -8,7 +8,7 @@
  * 2. 更大的存储空间 4M
  * 3. 封装的目的是 浏览器只支持字符串或者数字的阅读，对象是无法识别的，所以我们在存储的时候需要通过封装函数来更方便的设置和获取
  */
-import config from '../src/config'
+import config from '../config'
 
 export default {
   // 思路是先从浏览器中拿到json值 解析 然后存回去的时候再转化为 json
