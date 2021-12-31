@@ -1,7 +1,5 @@
 <template>
-  <div class="welcome-container">
-    <el-icon><histogram /></el-icon>
-  </div>
+  <div class="welcome-container"></div>
 </template>
 
 <script>
@@ -13,7 +11,8 @@ export default {
 
 <style lang="scss">
 .welcome-container {
-  height: 200px;
-  background-color: rgb(130, 160, 95);
+  width: 100%;
+  height: calc(100vh - 90px);
+  background-image: url('../assets/images/欢迎页面壁纸.jpg');
 }
 </style>

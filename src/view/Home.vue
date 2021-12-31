@@ -29,11 +29,15 @@
         </div>
         <div class="userinfo">
           <el-dropdown @command="handleCommand" trigger="click">
-            <span class="el-dropdown-link"> 你好 </span>
+            <span class="el-dropdown-link">{{
+              userInfo.userName ? '你好，' + userInfo.userName : '未登录'
+            }}</span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="a">邮箱</el-dropdown-item>
-                <el-dropdown-item command="b">退出登录</el-dropdown-item>
+                <el-dropdown-item>
+                  <span>电话：</span>{{ userInfo.mobile }}</el-dropdown-item
+                >
+                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -60,14 +64,22 @@ export default {
     return {
       // 注册一下获取的路由数据
       routeList: routeList,
-      isCollapse: false
+      isCollapse: false,
+      userInfo: {}
     }
   },
   methods: {
     handleCommand(command) {
       console.log(command)
-      console.log(this.$route)
+      if (command == 'logout') {
+        this.$store.commit('saveUserInfo', {})
+        this.userInfo = {}
+        this.$router.push('/login')
+      }
     }
+  },
+  mounted() {
+    this.userInfo = this.$store.state.userInfo
   }
 }
 </script>
@@ -119,7 +131,7 @@ export default {
       width: 100%;
       height: 50px;
       padding: 0 25px;
-      background-color: #99cccc;
+      background-color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
