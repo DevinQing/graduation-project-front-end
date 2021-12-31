@@ -24,13 +24,12 @@ const service = axios.create({
 // 请求拦截
 service.interceptors.request.use((req) => {
   const headers = req.headers
-  // 等有登录功能了之后再开启
-  // const { token } = storage.getItem('userInfo')
-  // // 判断请求权限
-  // // 发起请求的时候必须带上 token 这是 jwt 模式用于登录认证的
-  // if (!headers.Authorization) {
-  //   headers.Authorization = 'Bearer ' + token
-  // }
+  const { token } = storage.getItem('userInfo')
+  // 判断请求权限
+  // 发起请求的时候必须带上 token 这是 jwt 模式用于登录认证的
+  if (!headers.Authorization) {
+    headers.Authorization = 'Bearer ' + token
+  }
   return req
 })
 
