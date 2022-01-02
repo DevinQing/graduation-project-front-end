@@ -28,30 +28,58 @@ const routes = [
     component: () => import('../view/Login.vue')
   },
   {
-    name: 'message',
-    path: '/message',
+    name: 'user',
+    path: '/user',
     meta: {
-      title: '信息管理'
+      title: '用户管理'
     },
     component: () => import('../view/Home.vue'),
     children: [
       {
         // 命名路由的方式主要是为了方便跳转
-        name: 'project',
-        path: '/message/project',
-        meta: {
-          title: '项目信息'
-        },
-        component: () => import('../view/Welcome.vue')
-      },
-      {
-        // 命名路由的方式主要是为了方便跳转
-        name: 'users',
-        path: '/message/users',
+        name: 'userInfo',
+        path: '/user/info',
         meta: {
           title: '用户信息'
         },
-        component: () => import('../view/Welcome.vue')
+        component: () => import('../view/user/UserInfo.vue')
+      }
+    ]
+  },
+  {
+    name: 'project',
+    path: '/project',
+    meta: {
+      title: '项目管理'
+    },
+    component: () => import('../view/Home.vue'),
+    children: [
+      {
+        // 命名路由的方式主要是为了方便跳转
+        name: 'projectMessage',
+        path: '/project/message',
+        meta: {
+          title: '项目信息'
+        },
+        component: () => import('../view/user/UserInfo.vue')
+      },
+      {
+        // 命名路由的方式主要是为了方便跳转
+        name: 'projectModel',
+        path: '/project/model',
+        meta: {
+          title: '项目模型'
+        },
+        component: () => import('../view/user/UserInfo.vue')
+      },
+      {
+        // 命名路由的方式主要是为了方便跳转
+        name: 'projectProgress',
+        path: '/project/progress',
+        meta: {
+          title: '项目进度'
+        },
+        component: () => import('../view/user/UserInfo.vue')
       }
     ]
   },

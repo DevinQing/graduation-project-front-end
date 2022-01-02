@@ -37,6 +37,9 @@
                 <el-dropdown-item>
                   <span>电话：</span>{{ userInfo.mobile }}</el-dropdown-item
                 >
+                <el-dropdown-item>
+                  <span>职务：</span>{{ userInfo.role }}</el-dropdown-item
+                >
                 <el-dropdown-item command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -138,7 +141,12 @@ export default {
       .breadcrumb {
       }
       .userinfo {
+        cursor: pointer;
         padding-right: 20px;
+        .el-dropdown-link {
+          color: #336699;
+          font-weight: 600;
+        }
       }
     }
     .wrapper {

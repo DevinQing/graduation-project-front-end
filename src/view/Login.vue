@@ -4,9 +4,9 @@
       <div class="login-title">登录</div>
       <div class="login-form">
         <el-form :model="form" ref="loginRef" :rules="rules">
-          <el-form-item prop="userName">
+          <el-form-item prop="mobile">
             <el-input
-              v-model="form.userName"
+              v-model="form.mobile"
               placeholder="请输入用户名"
               clearable
             ></el-input>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import md5 from 'md5'
 import { ElMessage } from 'element-plus'
 import { userLogin } from '../api/users'
 export default {
@@ -43,8 +44,8 @@ export default {
   data() {
     return {
       form: {
-        userName: 'booker',
-        userPwd: '123456789'
+        mobile: '12345678945',
+        userPwd: '88888888'
       },
       rules: {
         userName: [
@@ -76,6 +77,7 @@ export default {
         if (valid) {
           try {
             const params = { ...this.form }
+            params.userPwd = md5(params.userPwd)
             const res = await userLogin(params)
             this.$store.commit('saveUserInfo', res)
             this.$router.push('/welcome')

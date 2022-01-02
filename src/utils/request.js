@@ -25,6 +25,9 @@ const service = axios.create({
 service.interceptors.request.use((req) => {
   const headers = req.headers
   const { token } = storage.getItem('userInfo')
+    ? storage.getItem('userInfo')
+    : ''
+
   // 判断请求权限
   // 发起请求的时候必须带上 token 这是 jwt 模式用于登录认证的
   if (!headers.Authorization) {
