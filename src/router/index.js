@@ -61,7 +61,7 @@ const routes = [
         meta: {
           title: '项目信息'
         },
-        component: () => import('../view/user/UserInfo.vue')
+        component: () => import('../view/project/ProjectMessage.vue')
       },
       {
         // 命名路由的方式主要是为了方便跳转
@@ -70,7 +70,7 @@ const routes = [
         meta: {
           title: '项目模型'
         },
-        component: () => import('../view/user/UserInfo.vue')
+        component: () => import('../view/project/ProjectModel.vue')
       },
       {
         // 命名路由的方式主要是为了方便跳转

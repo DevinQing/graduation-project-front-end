@@ -154,6 +154,9 @@ export default {
       padding: 20px;
       min-height: calc(100vh - 50px);
       background-color: #f1fafa;
+      .main-page {
+        min-height: calc(100vh - 90px);
+      }
     }
   }
 }
