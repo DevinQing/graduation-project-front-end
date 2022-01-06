@@ -10,6 +10,9 @@
       <el-menu-item index="Geology">项目地质报告</el-menu-item>
       <el-menu-item index="Devise">项目设计信息</el-menu-item>
       <el-menu-item index="Construction">施工信息</el-menu-item>
+      <el-menu-item
+        ><el-icon><circle-plus /></el-icon
+      ></el-menu-item>
     </el-menu>
     <div class="upload-file">
       <el-upload

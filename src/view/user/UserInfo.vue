@@ -97,7 +97,7 @@
     <!-- 新增编辑用户对话框 -->
     <el-dialog
       v-model="dialogVisible"
-      title="新增用户"
+      :title="`${this.action == 'add' ? '新增' : '编辑'}用户`"
       width="40%"
       custom-class="dialog-box"
     >
@@ -448,6 +448,7 @@ export default {
     },
     // 条件搜索
     fetchUserListByParams() {
+      this.page.pageNum = 1
       const params = { ...this.queryForm, ...this.page }
       // 翻页的时候也用该参数请求
       this.pageParams = { ...this.queryForm }

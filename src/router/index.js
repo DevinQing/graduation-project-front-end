@@ -90,7 +90,42 @@ const routes = [
       title: '模块管理'
     },
     component: () => import('../view/Home.vue'),
-    children: []
+    children: [
+      {
+        // 命名路由的方式主要是为了方便跳转
+        name: 'levelOneModule',
+        path: '/module/levelone',
+        meta: {
+          title: '一级模块'
+        },
+        component: () => import('../view/module/LevelOne.vue')
+      },
+      {
+        name: 'levelTwoModule',
+        path: '/module/leveltwo',
+        meta: {
+          title: '二级模块'
+        },
+        component: () => import('../view/module/LevelTwo.vue')
+      },
+      {
+        name: 'levelThreeModule',
+        path: '/module/levelthree',
+        meta: {
+          title: '三级模块'
+        },
+        component: () => import('../view/module/LevelThree.vue')
+      },
+      {
+        name: 'moduleDetail',
+        path: '/module/detail',
+        meta: {
+          title: '模块细节',
+          hidden: true
+        },
+        component: () => import('../view/module/ModuleDetail.vue')
+      }
+    ]
   }
 ]
 
