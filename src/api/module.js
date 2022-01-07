@@ -21,6 +21,6 @@ export const getModuleList = (data) => {
  * 通过 模块id 获取细节
  */
 
-export const getModuleDetailById = (id) => {
-  return request.get('/module/detail/' + id)
+export const getModuleDetailById = (data) => {
+  return request.get('/module/detail/', data)
 }

@@ -8,12 +8,12 @@
     >
       <el-menu-item index="overview">模块概览</el-menu-item>
     </el-menu>
-    <div class="add-btn">
+    <div class="add-btn" v-if="data.moduleLevel !== 1">
       <el-button type="primary" @click="addModule(id)" size="large"
         >引用并创建模块</el-button
       >
+      <el-button @click="fetchModuleDetailById" size="large">刷新</el-button>
     </div>
-
     <component :is="active" :data="data"></component>
   </div>
 </template>
@@ -40,6 +40,15 @@ export default {
       return this.$route.query.id
     }
   },
+  watch: {
+    id() {
+      // 当进入这个页面的时候 $route 的名字肯定不是 这个
+      // 这样当 进入这个页面的时候 id 改变了 则重新请求
+      if (this.$route.name == 'moduleDetail') {
+        this.fetchModuleDetailById()
+      }
+    }
+  },
   methods: {
     handleSelect(val) {
       console.log(val)
@@ -57,7 +66,7 @@ export default {
             params.createTime = Date.now()
             params.from = this.$store.state.userInfo.project
             const res = await operateModule(params)
-            console.log(res)
+
             if (params.moduleLevel === 2 && params.children.length > 0) {
               // 如果等于二 则需要创建多个模块
               // 这个之后再处理
@@ -82,8 +91,8 @@ export default {
     // 获取根据id 获取相关数据
     async fetchModuleDetailById() {
       try {
-        const res = await getModuleDetailById(this.id)
-        this.data = res
+        const res = await getModuleDetailById({ id: this.id })
+        this.data = res[0]
       } catch (err) {
         ElMessage.error('模块数据获取失败')
       }

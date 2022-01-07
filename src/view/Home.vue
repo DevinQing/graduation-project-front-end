@@ -47,7 +47,16 @@
         </div>
       </div>
       <div class="wrapper">
-        <router-view class="main-page"></router-view>
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component
+              :is="Component"
+              v-if="$route.meta.keepAlive"
+              :key="$route.path"
+            />
+          </keep-alive>
+          <component :is="Component" v-if="!$route.meta.keepAlive" />
+        </router-view>
       </div>
     </div>
   </div>
@@ -73,7 +82,6 @@ export default {
   },
   methods: {
     handleCommand(command) {
-      console.log(command)
       if (command == 'logout') {
         this.$store.commit('saveUserInfo', {})
         this.userInfo = {}

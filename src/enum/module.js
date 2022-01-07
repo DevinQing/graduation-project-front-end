@@ -25,3 +25,9 @@ export const ROCK_LEVEL = {
   4: 'Ⅳ级',
   5: 'Ⅴ级'
 }
+
+export const MODULE_TYPE = {
+  0: '所有',
+  1: '普通模块',
+  2: '循环模块'
+}

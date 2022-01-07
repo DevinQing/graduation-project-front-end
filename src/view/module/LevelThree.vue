@@ -7,39 +7,45 @@
           :model="queryForm"
           class="demo-form-inline"
           ref="queryFormRef"
+          label-width="80px"
         >
-          <el-form-item prop="moduleId">
-            <el-input
-              v-model="queryForm.moduleId"
-              placeholder="请输入模块id"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="moduleName">
-            <el-input
-              v-model="queryForm.moduleName"
-              placeholder="请输入模块名称"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="constrMethod">
-            <el-input
-              v-model="queryForm.constrMethod"
-              placeholder="请输入施工方法"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="rockLevel">
-            <el-select
-              v-model="queryForm.rockLevel"
-              placeholder="请选择围岩等级"
-            >
-              <el-option
-                v-for="(item, index) in rockLevelList"
-                :key="index"
-                :label="item"
-                :value="index"
+          <div>
+            <el-form-item prop="moduleId" label="模块ID">
+              <el-input
+                v-model="queryForm.moduleId"
+                placeholder="请输入模块id"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="moduleName" label="模块名称">
+              <el-input
+                v-model="queryForm.moduleName"
+                placeholder="请输入模块名称"
+              ></el-input>
+            </el-form-item>
+          </div>
+          <div>
+            <el-form-item prop="constrMethod" label="施工方法">
+              <el-input
+                v-model="queryForm.constrMethod"
+                placeholder="请输入施工方法"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="rockLevel" label="围岩等级">
+              <el-select
+                v-model="queryForm.rockLevel"
+                placeholder="请选择围岩等级"
               >
-              </el-option>
-            </el-select>
-          </el-form-item>
+                <el-option
+                  v-for="(item, index) in rockLevelList"
+                  :key="index"
+                  :label="item"
+                  :value="index"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+
           <el-form-item>
             <el-button type="primary" @click="fetchLevelOneListByParams"
               >查询</el-button
@@ -79,7 +85,7 @@
             />
             <el-table-column label="详情" align="center">
               <template #default="{ row }">
-                <el-button size="small" @click="checkDetail(row)"
+                <el-button size="small" @click="checkDetail(row.moduleId)"
                   >查看详情</el-button
                 >
               </template>
@@ -116,7 +122,6 @@
       :title="`${action == 'add' ? '新增' : '编辑'}三级模块`"
       :before-close="confirmClose"
       size="40%"
-      :append-to-body="true"
       custom-class="operate-module-box"
     >
       <div class="demo-drawer__content">
@@ -177,10 +182,6 @@
                 <span> (单位：min)</span>
               </div>
             </div>
-          </el-form-item>
-          <el-form-item label="循环进尺" prop="cycleForward">
-            <el-input-number v-model="form.cycleForward" :step="10" />
-            <span>（单位：m）</span>
           </el-form-item>
           <el-form-item label="备注" prop="remark">
             <el-input
@@ -279,13 +280,6 @@ export default {
           formatter(row, column, cellValue) {
             return cellValue + 'min'
           }
-        },
-        {
-          label: '循环进尺',
-          prop: 'cycleForward',
-          formatter(row, column, cellValue) {
-            return cellValue + 'm'
-          }
         }
       ],
       total: 0,
@@ -365,19 +359,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        cycleForward: [
-          {
-            required: true,
-            message: '循环进尺不能为空',
-            trigger: 'blur'
-          },
-          {
-            type: 'number',
-            min: 1,
-            message: '循环进尺必须大于0',
-            trigger: 'blur'
-          }
-        ],
+
         remark: [
           {
             required: true,
@@ -440,9 +422,8 @@ export default {
         this.isLoading = false
       }
     },
-    checkDetail(row) {
-      const id = row.moduleId
-      this.$router.push({ path: 'detail', query: { id: id } })
+    checkDetail(id) {
+      this.$router.push({ name: 'moduleDetail', query: { id: id } })
     },
     // 编辑三级模块操作
     editModule(row) {

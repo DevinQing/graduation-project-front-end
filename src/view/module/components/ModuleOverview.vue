@@ -9,7 +9,7 @@
           size="large"
         >
           <el-descriptions-item
-            v-for="item in listMeta"
+            v-for="item in cptListMeta"
             :key="item.label"
             :label="item.label"
             label-class-name="info-label"
@@ -45,9 +45,16 @@
             展示该模块所包含的子模块
           </el-descriptions-item>
           <el-descriptions-item label-class-name="info-label">
-            <el-tree :data="parData.children" :props="defaultProps">
+            <el-tree :data="[parData]" :props="defaultProps">
               <template #default="{ data }">
-                <div class="cycle-treenode" v-if="!data.moduleId">
+                <div class="cycle-treenode" v-if="data.moduleId">
+                  <span class="module-level">{{ data.moduleLevel }}</span>
+                  <span>{{ data.moduleName }}</span>
+                  <span class="check-detail" @click="checkDetail(data)"
+                    >查看详情</span
+                  >
+                </div>
+                <div class="cycle-treenode" v-else>
                   <span>循环项</span>
                   <span>{{ data.moduleName }}</span>
                   <span>{{ data.time }}min</span>
@@ -63,6 +70,7 @@
 
 <script>
 import moment from 'moment'
+import { keepDecimal } from '@/utils/utils'
 export default {
   name: 'ModuleOverview',
   props: {
@@ -76,13 +84,19 @@ export default {
       listMeta: [
         {
           label: '模块Id',
-          value: 'moduleId'
+          value: 'moduleId',
+          show() {
+            return true
+          }
         },
         {
           label: '创建时间',
           value: 'createTime',
           format(val) {
             return moment(val).format('YYYY-MM-DD hh:mm:ss')
+          },
+          show() {
+            return true
           }
         },
         {
@@ -90,11 +104,17 @@ export default {
           value: 'lastUpdateTime',
           format(val) {
             return moment(val).format('YYYY-MM-DD hh:mm:ss')
+          },
+          show() {
+            return true
           }
         },
         {
           label: '模块名称',
-          value: 'moduleName'
+          value: 'moduleName',
+          show() {
+            return true
+          }
         },
         {
           label: '模块等级',
@@ -105,11 +125,17 @@ export default {
               2: '二级',
               3: '三级'
             }[val]
+          },
+          show() {
+            return true
           }
         },
         {
           label: '施工方法',
-          value: 'constrMethod'
+          value: 'constrMethod',
+          show() {
+            return true
+          }
         },
         {
           label: '围岩等级',
@@ -122,13 +148,20 @@ export default {
               4: 'Ⅳ级',
               5: 'Ⅴ级'
             }[val]
+          },
+          show() {
+            return true
           }
         },
         {
           label: '循环时间',
           value: 'cycleTime',
           format(val) {
-            return val + 'min'
+            return keepDecimal(val / 60, 1) + 'h'
+          },
+          show(item) {
+            if (item.moduleLevel === 3 || item.moduleType === 2) return true
+            return false
           }
         },
         {
@@ -136,84 +169,56 @@ export default {
           value: 'cycleForward',
           format(val) {
             return val + 'm'
+          },
+          show(item) {
+            if (item.moduleType == 2) {
+              return true
+            } else {
+              return false
+            }
           }
         },
         {
           label: '模块来源',
-          value: 'from'
+          value: 'from',
+          show() {
+            return true
+          }
+        },
+        {
+          label: '计划持续时间',
+          value: 'planLastTime',
+          format(val) {
+            return val + 'd'
+          },
+          show(item) {
+            if (item.moduleType === 1) return true
+            return false
+          }
         }
       ],
       defaultProps: {
         children: 'children',
         label: 'moduleName'
-      },
-      ldata: [
-        {
-          label: 'Level one 1',
-          children: [
-            {
-              label: 'Level two 1-1',
-              children: [
-                {
-                  label: 'Level three 1-1-1'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: 'Level one 2',
-          children: [
-            {
-              label: 'Level two 2-1',
-              children: [
-                {
-                  label: 'Level three 2-1-1'
-                }
-              ]
-            },
-            {
-              label: 'Level two 2-2',
-              children: [
-                {
-                  label: 'Level three 2-2-1'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: 'Level one 3',
-          children: [
-            {
-              label: 'Level two 3-1',
-              children: [
-                {
-                  label: 'Level three 3-1-1'
-                }
-              ]
-            },
-            {
-              label: 'Level two 3-2',
-              children: [
-                {
-                  label: 'Level three 3-2-1'
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      }
     }
   },
   methods: {
     check(node) {
       console.log(node)
+    },
+    checkDetail(data) {
+      this.$router.push({ name: 'moduleDetail', query: { id: data.moduleId } })
     }
   },
   computed: {
     parData() {
       return { ...this.data }
+    },
+    cptListMeta() {
+      return this.listMeta.filter((item) => {
+        return item.show(this.parData)
+      })
     }
   },
   mounted() {}
@@ -243,7 +248,21 @@ export default {
     flex: 0.9;
     .cycle-treenode {
       display: flex;
+      align-items: center;
       width: 100%;
+      .module-level {
+        flex: 0.2;
+        font-weight: 600;
+        color: #336699;
+      }
+      .check-detail {
+        font-size: 12px;
+        font-weight: 600;
+        &:hover {
+          cursor: pointer;
+          color: #3f9eff;
+        }
+      }
       & > span {
         flex: 1;
       }

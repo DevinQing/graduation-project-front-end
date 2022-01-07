@@ -104,7 +104,8 @@ const routes = [
         name: 'levelTwoModule',
         path: '/module/leveltwo',
         meta: {
-          title: '二级模块'
+          title: '二级模块',
+          keepAlive: true
         },
         component: () => import('../view/module/LevelTwo.vue')
       },
@@ -121,7 +122,8 @@ const routes = [
         path: '/module/detail',
         meta: {
           title: '模块细节',
-          hidden: true
+          hidden: true,
+          keepAlive: true
         },
         component: () => import('../view/module/ModuleDetail.vue')
       }
