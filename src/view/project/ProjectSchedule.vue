@@ -89,7 +89,12 @@
                 <el-button size="small" @click="editSchedule(row)"
                   >编辑</el-button
                 >
-                <el-button size="small" type="danger">删除</el-button>
+                <el-button
+                  size="small"
+                  type="danger"
+                  @click="deleteSchedule(row)"
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -113,7 +118,7 @@
 <script>
 import { formatTime } from '@/utils/utils'
 import { STATE_LIST } from '@/enum/schedule'
-import { getScheduleList } from '@/api/schedule'
+import { getScheduleList, operateSchedule } from '@/api/schedule'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 export default {
@@ -201,6 +206,36 @@ export default {
         id: id
       }
       this.jumpToDetail(params)
+    },
+    // 删除进度任务
+    deleteSchedule(row) {
+      ElMessageBox.confirm(
+        '确定删除该条进度任务？',
+
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'error'
+        }
+      )
+        .then(async () => {
+          const params = {
+            action: 'delete',
+            scheduleId: row.scheduleId
+          }
+          const res = await operateSchedule(params)
+
+          ElMessage({
+            type: 'success',
+            message: '删除成功'
+          })
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '操作取消'
+          })
+        })
     },
     // 查看详情
     checkDetail(row) {
