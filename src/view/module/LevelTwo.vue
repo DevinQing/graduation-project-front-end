@@ -151,6 +151,9 @@
           :rules="formRules"
           label-width="120px"
         >
+          <el-form-item label="排序号" prop="order">
+            <el-input-number v-model="form.order" :min="0" />
+          </el-form-item>
           <el-form-item label="模块名称" prop="moduleName">
             <el-input
               v-model="form.moduleName"
@@ -338,9 +341,11 @@ export default {
         moduleLevel: 2,
         remark: '',
         planLastTime: 0,
+        // 一般进度指标会小于计算结果 所以我们可以根据实际情况重新设计进度指标
         monthForward: 0,
         cycleForward: 0,
-        cycleTime: 0
+        cycleTime: 0,
+        order: 0
       },
       // 操作三级模块表单的校验规则
       formRules: {
@@ -553,7 +558,7 @@ export default {
     },
     // 计算月进尺
     calcMonthForward(l, t) {
-      let dayCycle = 54 / (t / 24)
+      let dayCycle = 24 / (t / 60)
       return parseInt(l * dayCycle * 30)
     }
   },

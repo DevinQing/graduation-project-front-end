@@ -53,9 +53,14 @@
               :is="Component"
               v-if="$route.meta.keepAlive"
               :key="$route.path"
+              class="main-page"
             />
           </keep-alive>
-          <component :is="Component" v-if="!$route.meta.keepAlive" />
+          <component
+            class="main-page"
+            :is="Component"
+            v-if="!$route.meta.keepAlive"
+          />
         </router-view>
       </div>
     </div>

@@ -10,5 +10,8 @@ export default {
     state.userInfo = userInfo
     // 改变浏览器中存储的 userInfo
     storage.setItem('userInfo', userInfo)
+  },
+  setGanttData(state, gantt) {
+    state.ganttData = gantt
   }
 }

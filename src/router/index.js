@@ -79,7 +79,27 @@ const routes = [
         meta: {
           title: '项目进度'
         },
-        component: () => import('../view/user/UserInfo.vue')
+        component: () => import('../view/project/ProjectSchedule.vue')
+      },
+      {
+        name: 'scheduleDetail',
+        path: '/project/progress/detail',
+        meta: {
+          title: '进度任务',
+          hidden: true
+        },
+        props: true,
+        component: () => import('../view/project/ScheduleDetail.vue')
+      },
+      {
+        name: 'ganttDetail',
+        path: '/project/progress/gantt',
+        meta: {
+          title: '进度图像',
+          hidden: true
+        },
+        props: true,
+        component: () => import('../view/project/GanttDetail.vue')
       }
     ]
   },

@@ -131,6 +131,9 @@
           ref="formRef"
           :rules="formRules"
         >
+          <el-form-item label="排序号" prop="order">
+            <el-input-number v-model="form.order" :min="0" />
+          </el-form-item>
           <el-form-item label="模块名称" prop="moduleName">
             <el-input
               v-model="form.moduleName"
@@ -292,6 +295,7 @@ export default {
       // 表单类
       // 增加和编辑三级模块的表单
       form: {
+        order: 0,
         moduleName: '',
         constrMethod: '',
         rockLevel: '',

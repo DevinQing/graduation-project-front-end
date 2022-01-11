@@ -1,69 +1,76 @@
 <template>
-  <div class="module-overview-container">
-    <div class="information-content">
-      <el-card>
-        <el-descriptions
-          class="margin-top"
-          title="模块信息"
-          :column="2"
-          size="large"
-        >
-          <el-descriptions-item
-            v-for="item in cptListMeta"
-            :key="item.label"
-            :label="item.label"
-            label-class-name="info-label"
-            >{{
-              item.format
-                ? item.format(parData[item.value])
-                : parData[item.value]
-            }}</el-descriptions-item
-          >
-        </el-descriptions>
-        <el-descriptions
-          style="margin-top: 15px"
-          class="margin-top"
-          title="备注信息"
-          :column="1"
-          size="large"
-        >
-          <el-descriptions-item label-class-name="info-label">{{
-            parData.remark
-          }}</el-descriptions-item>
-        </el-descriptions>
-      </el-card>
+  <div>
+    <div class="add-btn" v-if="data.moduleLevel !== 1">
+      <el-button type="primary" @click="addModule(id)" size="large"
+        >引用并创建模块</el-button
+      >
     </div>
-    <div class="tree-content">
-      <el-card>
-        <el-descriptions
-          class="margin-top"
-          title="模块树"
-          :column="1"
-          size="large"
-        >
-          <el-descriptions-item label-class-name="info-label" label="说明">
-            展示该模块所包含的子模块
-          </el-descriptions-item>
-          <el-descriptions-item label-class-name="info-label">
-            <el-tree :data="[parData]" :props="defaultProps">
-              <template #default="{ data }">
-                <div class="cycle-treenode" v-if="data.moduleId">
-                  <span class="module-level">{{ data.moduleLevel }}</span>
-                  <span>{{ data.moduleName }}</span>
-                  <span class="check-detail" @click="checkDetail(data)"
-                    >查看详情</span
-                  >
-                </div>
-                <div class="cycle-treenode" v-else>
-                  <span>循环项</span>
-                  <span>{{ data.moduleName }}</span>
-                  <span>{{ data.time }}min</span>
-                  <span></span>
-                </div> </template
-            ></el-tree>
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-card>
+    <div class="module-overview-container">
+      <div class="information-content">
+        <el-card>
+          <el-descriptions
+            class="margin-top"
+            title="模块信息"
+            :column="2"
+            size="large"
+          >
+            <el-descriptions-item
+              v-for="item in cptListMeta"
+              :key="item.label"
+              :label="item.label"
+              label-class-name="info-label"
+              >{{
+                item.format
+                  ? item.format(parData[item.value])
+                  : parData[item.value]
+              }}</el-descriptions-item
+            >
+          </el-descriptions>
+          <el-descriptions
+            style="margin-top: 15px"
+            class="margin-top"
+            title="备注信息"
+            :column="1"
+            size="large"
+          >
+            <el-descriptions-item label-class-name="info-label">{{
+              parData.remark
+            }}</el-descriptions-item>
+          </el-descriptions>
+        </el-card>
+      </div>
+      <div class="tree-content">
+        <el-card>
+          <el-descriptions
+            class="margin-top"
+            title="模块树"
+            :column="1"
+            size="large"
+          >
+            <el-descriptions-item label-class-name="info-label" label="说明">
+              展示该模块所包含的子模块
+            </el-descriptions-item>
+            <el-descriptions-item label-class-name="info-label">
+              <el-tree :data="[parData]" :props="defaultProps">
+                <template #default="{ data }">
+                  <div class="cycle-treenode" v-if="data.moduleId">
+                    <span class="module-level">{{ data.moduleLevel }}</span>
+                    <span>{{ data.moduleName }}</span>
+                    <span class="check-detail" @click="checkDetail(data)"
+                      >查看详情</span
+                    >
+                  </div>
+                  <div class="cycle-treenode" v-else>
+                    <span>循环项</span>
+                    <span>{{ data.moduleName }}</span>
+                    <span>{{ data.time }}min</span>
+                    <span></span>
+                  </div> </template
+              ></el-tree>
+            </el-descriptions-item>
+          </el-descriptions>
+        </el-card>
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +78,9 @@
 <script>
 import moment from 'moment'
 import { keepDecimal } from '@/utils/utils'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import { operateModule } from '@/api/module'
+
 export default {
   name: 'ModuleOverview',
   props: {
@@ -128,6 +138,19 @@ export default {
           },
           show() {
             return true
+          }
+        },
+        {
+          label: '模块类型',
+          value: 'moduleType',
+          format: (val) => {
+            return {
+              1: '普通模块',
+              2: '循环模块'
+            }[val]
+          },
+          show(item) {
+            return item.moduleLevel === 2
           }
         },
         {
@@ -209,6 +232,42 @@ export default {
     },
     checkDetail(data) {
       this.$router.push({ name: 'moduleDetail', query: { id: data.moduleId } })
+    },
+    addModule() {
+      ElMessageBox.confirm('确定引用并创建一个新模块？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          try {
+            const params = { ...this.data }
+            params.action = 'add'
+            params.createTime = Date.now()
+            params.from = this.$store.state.userInfo.project
+            const res = await operateModule(params)
+
+            if (params.moduleLevel === 2 && params.children.length > 0) {
+              // 如果等于二 则需要创建多个模块
+              // 这个之后再处理
+            }
+            ElMessageBox.alert(
+              `创建成功！ 模块Id为 <strong style="color: red;">${res.moduleId}</strong>，模块名为 <strong style="color: red;">${res.moduleName}</strong>`,
+              {
+                dangerouslyUseHTMLString: true
+              }
+            )
+          } catch (err) {
+            console.log(err)
+            ElMessage.error(err)
+          }
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '您已取消该操作'
+          })
+        })
     }
   },
   computed: {
