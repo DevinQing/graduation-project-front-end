@@ -100,6 +100,16 @@ const routes = [
         },
         props: true,
         component: () => import('../view/project/GanttDetail.vue')
+      },
+      {
+        name: 'scheduleData',
+        path: '/project/progress/data',
+        meta: {
+          title: '进度数据',
+          hidden: true
+        },
+        props: true,
+        component: () => import('../view/project/DataDetail.vue')
       }
     ]
   },

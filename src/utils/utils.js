@@ -4,10 +4,13 @@ import moment from 'moment'
  */
 
 export const keepDecimal = (num, len = 0) => {
-  if (isNaN(num)) return num
+  if (isNaN(num)) {
+    return num
+  }
   const arr = (num + '').split('.')
   // 如果能直接整除 保留一位
   if (!arr[1]) arr[1] = '00000000'
+  arr[1] = arr[1] + '0000000'
   arr[1] = arr[1].substring(0, len)
   if (len == 0) {
     return arr[0]

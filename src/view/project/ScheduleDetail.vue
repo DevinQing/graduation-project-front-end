@@ -103,6 +103,7 @@
             <el-button type="primary" @click="checkGantt"
               >查看进度甘特图</el-button
             >
+            <el-button type="danger" @click="checkData">数据分析</el-button>
           </div>
           <el-collapse v-model="activeNames">
             <el-collapse-item name="plan">
@@ -265,11 +266,11 @@
 import { operateSchedule, getDetailById } from '@/api/schedule'
 import { getModuleDetailById } from '@/api/module'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { addDays } from '../../utils/utils'
+import { addDays } from '@/utils/utils'
 import _ from 'lodash'
 
 // 导出 excel 表
-import exportExcel from '../../utils/exportExcel'
+import exportExcel from '@/utils/exportExcel'
 export default {
   name: 'ScheduleDetail',
 
@@ -335,6 +336,16 @@ export default {
     }
   },
   methods: {
+    // 查看进度相关数据分析 延期率
+    checkData() {
+      const id = this.$route.query.id
+      this.$router.push({
+        name: 'scheduleData',
+        query: {
+          id: id
+        }
+      })
+    },
     exportex(data, fileName) {
       if (!data.length > 0) return ElMessage.error('无数据')
       let fields = {
@@ -391,7 +402,6 @@ export default {
                   ...this.form
                 }
                 params.action = this.action
-                console.log(params)
                 const res = await operateSchedule(params)
                 ElMessage.success('操作成功')
                 // this.$router.push({ name: 'projectProgress' })
@@ -463,7 +473,8 @@ export default {
           text: item.moduleName,
           start_date: '',
           duration,
-          end_date: ''
+          end_date: '',
+          order: item.order
         })
         res.actual.push({
           id: item.moduleId,
@@ -471,6 +482,7 @@ export default {
           start_date: '',
           duration: 0,
           end_date: '',
+          order: item.order,
           color: '#6BC172'
         })
       })

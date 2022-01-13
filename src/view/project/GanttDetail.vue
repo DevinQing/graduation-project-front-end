@@ -6,15 +6,18 @@
       mode="horizontal"
       @select="handleSelect"
     >
-      <el-menu-item index="1">计划进度</el-menu-item>
-      <el-menu-item index="4">实际进度</el-menu-item>
+      <el-menu-item index="plan">计划进度</el-menu-item>
+      <el-menu-item index="actual">实际进度</el-menu-item>
     </el-menu>
     <div>
       <schdule
         :tasksData="$store.state.ganttData.planData"
-        v-if="index == 1"
+        v-if="index == 'plan'"
       ></schdule>
-      <schdule :tasksData="$store.state.ganttData.actualData" v-else></schdule>
+      <schdule
+        :tasksData="$store.state.ganttData.actualData"
+        v-else-if="index == 'actual'"
+      ></schdule>
     </div>
   </div>
 </template>
@@ -29,13 +32,14 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1',
-      index: '1'
+      activeIndex: 'plan',
+      index: 'plan'
     }
   },
   methods: {
     handleSelect(val) {
       this.index = val
+      console.log('val', val)
     }
   }
 }
